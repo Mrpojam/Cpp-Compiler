@@ -36,6 +36,17 @@ public class Lexical {
         return false;
     }
 
+    // Function to check of a string is a symbol
+    public static boolean IsSymbol(String str) {
+        String[] symbols = {};
+        for (String word : symbols) {
+            if (str.equals(word)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // Function to check if a string is a valid string (enclosed in quotation marks)
     public static boolean isString(String str) {
         return str.startsWith("\"") && str.endsWith("\"");
@@ -53,7 +64,7 @@ public class Lexical {
                     currentToken.setLength(0);
                 }
                 if (!Character.isWhitespace(ch)) {
-                    if (isPartOfMultiCharOperator(ch) && i < code.length() - 1 && isPartOfMultiCharOperator(code.charAt(i + 1))) {
+                    if (isPartOfMultiCharSymbols(ch) && i < code.length() - 1 && isPartOfMultiCharSymbols(code.charAt(i + 1))) {
                         currentToken.append(ch);
                         currentToken.append(code.charAt(i + 1));
                         i++; // Skip the next character
@@ -84,10 +95,10 @@ public class Lexical {
         return false;
     }
 
-    // Function to check if a character is part of a multi-character operator
-    private static boolean isPartOfMultiCharOperator(char ch) {
-        char[] multiCharOperators = {'=', '+', '&', '|', '<', '>'};
-        for (char c : multiCharOperators) {
+    // Function to check if a character is part of a multi-character Symbols
+    private static boolean isPartOfMultiCharSymbols(char ch) {
+        char[] multiCharSymbolss = {'=', '+', '&', '|', '<', '>'};
+        for (char c : multiCharSymbolss) {
             if (ch == c) {
                 return true;
             }
@@ -106,7 +117,7 @@ public class Lexical {
             } else if (isString(token)) {
                 analyzedTokens.add("<String, " + token + ">");
             } else {
-                analyzedTokens.add("<Operator, " + token + ">");
+                analyzedTokens.add("<Symbol, " + token + ">");
             }
         }
         return analyzedTokens;
@@ -115,13 +126,10 @@ public class Lexical {
     public static void RunAnalyzerTest() {
         // Test the tokenizeCode method
 //        String code = "int main() {\n    return 0;\n}";
-        String code = "#include<iostream>\n using namespace std;\n int main() {\nint x = 0;\n x++;\n if(x == 1)\n\t cout << \"yes\";   return 0;\n}";
+        String code = "#include<iostream>\n using namespace std;\n int main() {\nint x = 0;\n x++;\n if(x == 1)\n\t cout << \"yes\"; else if (x >= 5) cout << \"no\";  return 0;\n}";
 
         List<String> tokens = tokenizeCode(code);
         System.out.println("Tokenized code:");
-        for (String token : tokens) {
-            System.out.println(token);
-        }
 
         // Test the analyzeTokens method
         System.out.println("\nAnalyzed tokens:");
@@ -150,10 +158,6 @@ public class Lexical {
                 System.out.println("\u001B[31m- Missing token: " + expectedToken); // Print missing token in red '-'
             }
         }
-//        System.out.println("Tokenized code:");
-//        for (String token : tokens) {
-//            System.out.println(token);
-//        }
     }
 
     public static void RunTokenTypeTest() {
