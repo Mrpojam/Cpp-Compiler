@@ -8,8 +8,10 @@ public class Main {
 
         String PlainCode = CodeReader.read("Codes/main.cpp");
         String CleanedCode = CodeCleaner.cleanCode((PlainCode));
-        List<String> tokens = Lexical.tokenizeCode(CleanedCode);
+
+        System.out.println("####Cleaned Code####");
         System.out.println(CleanedCode);
+        List<String> tokens = Lexical.tokenizeCode(CleanedCode);
         List<String> analyzedTokens = Lexical.analyzeTokens(tokens);
         for (String token : analyzedTokens) {
             System.out.println(token);

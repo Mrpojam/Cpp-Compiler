@@ -20,6 +20,7 @@ public class CodeCleaner {
                 result.append(code.charAt(i));
             }
         }
+
         return result.toString();
 
     }
