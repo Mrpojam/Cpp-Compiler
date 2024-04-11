@@ -35,18 +35,6 @@ public class Lexical {
         }
         return false;
     }
-
-    // Function to check of a string is a symbol
-    public static boolean IsSymbol(String str) {
-        String[] symbols = {};
-        for (String word : symbols) {
-            if (str.equals(word)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     // Function to check if a string is a valid string (enclosed in quotation marks)
     public static boolean isString(String str) {
         return str.startsWith("\"") && str.endsWith("\"");
