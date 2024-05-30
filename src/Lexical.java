@@ -2,6 +2,25 @@ import java.util.regex.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+enum TokenType {
+    IDENTIFIER, NUMBER, RESERVEDWORD, SYMBOL, STRING, ERROR
+}
+
+class Token {
+    TokenType type;
+    String value;
+
+    Token(TokenType type, String value) {
+        this.type = type;
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return type + " (" + value + ")";
+    }
+}
 public class Lexical {
     // Function to check if a character is a letter
     public static boolean isLetter(char ch) {
@@ -27,7 +46,7 @@ public class Lexical {
     public static boolean isReservedWord(String str) {
         String[] reservedWords = {"int", "float", "return", "if", "while", "cin", "cout",
                 "continue", "break", "#include", "using", "namespace",
-                "std", "main", "=", "+", "&&", "||", "<<", ">>"};
+                "std", "main"};
         for (String word : reservedWords) {
             if (str.equals(word)) {
                 return true;
@@ -93,19 +112,19 @@ public class Lexical {
         }
         return false;
     }
-    public static List<String> analyzeTokens(List<String> tokens) {
-        List<String> analyzedTokens = new ArrayList<>();
+    public static List<Token> analyzeTokens(List<String> tokens) {
+        List<Token> analyzedTokens = new ArrayList<>();
         for (String token : tokens) {
-            if (isIdentifier(token)) {
-                analyzedTokens.add("<Identifier, " + token + ">");
-            } else if (isReservedWord(token)) {
-                analyzedTokens.add("<ReservedWord, " + token + ">");
+            if (isReservedWord(token)) {
+                analyzedTokens.add(new Token(TokenType.RESERVEDWORD, token));
+            }else if (isIdentifier(token)) {
+                analyzedTokens.add(new Token(TokenType.IDENTIFIER, token));
             } else if (isNumber(token)) {
-                analyzedTokens.add("<Number, " + token + ">");
+                analyzedTokens.add(new Token(TokenType.NUMBER, token));
             } else if (isString(token)) {
-                analyzedTokens.add("<String, " + token + ">");
+                analyzedTokens.add(new Token(TokenType.STRING, token));
             } else {
-                analyzedTokens.add("<Symbol, " + token + ">");
+                analyzedTokens.add(new Token(TokenType.SYMBOL, token));
             }
         }
         return analyzedTokens;
@@ -121,9 +140,9 @@ public class Lexical {
 
         // Test the analyzeTokens method
         System.out.println("\nAnalyzed tokens:");
-        List<String> analyzedTokens = analyzeTokens(tokens);
-        for (String token : analyzedTokens) {
-            System.out.println(token);
+        List<Token> analyzedTokens = analyzeTokens(tokens);
+        for (Token token : analyzedTokens) {
+            System.out.println(token.toString());
         }
     }
     public static void RunTokenizerTest() {
