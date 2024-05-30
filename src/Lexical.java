@@ -44,9 +44,9 @@ public class Lexical {
 
     // Function to check if a string is a reserved word
     public static boolean isReservedWord(String str) {
-        String[] reservedWords = {"int", "float", "return", "if", "while", "cin", "cout",
+        String[] reservedWords = {"int", "float", "return", "if", "while", "for", "cin", "cout",
                 "continue", "break", "#include", "using", "namespace",
-                "std", "main"};
+                "std", "main", "endl"};
         for (String word : reservedWords) {
             if (str.equals(word)) {
                 return true;

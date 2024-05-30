@@ -42,6 +42,7 @@ public class Parser {
 
     private void advanceToken() {
         currentTokenIndex++;
+        System.out.println("Current Token: " + getCurrentToken());
     }
 
     private void retrieveToken() {
@@ -78,6 +79,19 @@ public class Parser {
             case IDENTIFIER:
                 if (token.value.equals("return")) {
                     returnStatement(node);
+                }else if (true) {
+                    advanceToken();
+                    Token token11 = getCurrentToken();
+                    if (match(TokenType.SYMBOL, "==") || match(TokenType.SYMBOL, ">=") || match(TokenType.SYMBOL, "<=") || match(TokenType.SYMBOL, ">") || match(TokenType.SYMBOL, "<")) {
+                        System.out.println("boolean op " + token11);
+                        expression(node);
+
+                    } else {
+
+                        retrieveToken();
+                        assignmentOrFunctionCall(node);
+                    }
+
                 } else {
                     assignmentOrFunctionCall(node);
                 }
@@ -99,6 +113,7 @@ public class Parser {
 
     private void assignmentOrFunctionCall(ParseTreeNode parent) throws Exception {
         Token token = getCurrentToken();
+        System.out.println("DE " + token);
         if (token.type != TokenType.IDENTIFIER) {
             error("Expected identifier");
         }
@@ -145,6 +160,8 @@ public class Parser {
             expression(node);
             if (!match(TokenType.SYMBOL, ")")) {
                 if (!match(TokenType.SYMBOL, ",")) {
+                    Token token = getCurrentToken();
+                    System.out.println(token);
                     error("Expected ',' in function call");
                 }
                 advanceToken();
@@ -314,13 +331,18 @@ public class Parser {
         advanceToken(); // consume for
         ParseTreeNode node = new ParseTreeNode("forStatement");
         parent.addChild(node);
+
         if (!match(TokenType.SYMBOL, "(")) {
             error("Expected '(' after 'for'");
         }
         node.addChild(new ParseTreeNode("("));
         advanceToken();
         statement(node);
+        retrieveToken();
+
         if (!match(TokenType.SYMBOL, ";")) {
+            Token token = getCurrentToken();
+            System.out.println("DEBUGG " + token);
             error("Expected ';' in 'for' statement");
         }
         node.addChild(new ParseTreeNode(";"));
@@ -364,7 +386,7 @@ public class Parser {
         advanceToken(); // consume cout
         ParseTreeNode node = new ParseTreeNode("outputStatement");
         parent.addChild(node);
-        while (match(TokenType.RESERVEDWORD, "<<")) {
+        while (match(TokenType.SYMBOL, "<<")) {
             node.addChild(new ParseTreeNode("<<"));
             advanceToken();
             expression(node);
@@ -511,12 +533,18 @@ public class Parser {
 
         term(exprNode);
 
-        while (match(TokenType.SYMBOL, "+") || match(TokenType.SYMBOL, "-")) {
+        if (match(TokenType.SYMBOL, "++") || match(TokenType.SYMBOL, "--")) {
             Token operator = getCurrentToken();
             exprNode.addChild(new ParseTreeNode(operator.value)); // Add operator node
             advanceToken();
-            term(exprNode);
         }
+        else
+            while (match(TokenType.SYMBOL, "+") || match(TokenType.SYMBOL, "-")) {
+                Token operator = getCurrentToken();
+                exprNode.addChild(new ParseTreeNode(operator.value)); // Add operator node
+                advanceToken();
+                term(exprNode);
+            }
     }
 
     private void term(ParseTreeNode parent) throws Exception {
@@ -525,7 +553,8 @@ public class Parser {
 
         factor(termNode);
 
-        while (match(TokenType.SYMBOL, "*") || match(TokenType.SYMBOL, "/")) {
+        while (match(TokenType.SYMBOL, "*") || match(TokenType.SYMBOL, "/") || match(TokenType.SYMBOL, "==") || match(TokenType.SYMBOL, "<=") || match(TokenType.SYMBOL, ">=")
+    || match(TokenType.SYMBOL, "<") || match(TokenType.SYMBOL, ">")) {
             Token operator = getCurrentToken();
             termNode.addChild(new ParseTreeNode(operator.value)); // Add operator node
             advanceToken();

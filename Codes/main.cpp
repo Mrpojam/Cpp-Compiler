@@ -3,7 +3,9 @@ using namespace std;
 
 // main function
 int main () {
-    int x;
-    x = 3 + 2 * 9;
+    int i;
+    for (i = 0; i < 10, i++)
+        cout << "hello_world";
     return 0;
 }
+
