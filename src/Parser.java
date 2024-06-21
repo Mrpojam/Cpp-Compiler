@@ -1,7 +1,8 @@
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
-
+import java.util.Queue;
+import java.util.LinkedList;
 
 class ParseTreeNode {
     String value;
@@ -18,7 +19,20 @@ class ParseTreeNode {
 
     @Override
     public String toString() {
-        return value + " -> " + children;
+        ParseTreeNode root = this;
+
+        Queue<ParseTreeNode> queue = new LinkedList<>();
+        queue.add(root);
+
+        while (!queue.isEmpty()) {
+            ParseTreeNode node = queue.poll();
+            for (ParseTreeNode u : node.children) {
+                System.out.println(node.value + "->" + u.value);
+                queue.add(u);
+            }
+        }
+
+        return " ";
     }
 }
 
@@ -42,7 +56,6 @@ public class Parser {
 
     private void advanceToken() {
         currentTokenIndex++;
-        System.out.println("Current Token: " + getCurrentToken());
     }
 
     private void retrieveToken() {
@@ -83,7 +96,6 @@ public class Parser {
                     advanceToken();
                     Token token11 = getCurrentToken();
                     if (match(TokenType.SYMBOL, "==") || match(TokenType.SYMBOL, ">=") || match(TokenType.SYMBOL, "<=") || match(TokenType.SYMBOL, ">") || match(TokenType.SYMBOL, "<")) {
-                        System.out.println("boolean op " + token11);
                         expression(node);
 
                     } else {

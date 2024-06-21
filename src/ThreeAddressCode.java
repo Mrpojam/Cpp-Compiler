@@ -1,5 +1,8 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+
 
 class ThreeAddressCodeGenerator {
     private List<String> instructions;
@@ -10,12 +13,12 @@ class ThreeAddressCodeGenerator {
         tempVarCounter = 0;
     }
 
-    public List<String> generateTAC(ParseTreeNode root) {
+    public List<String> generateTAC(SyntaxTreeeNode root) {
         traverse(root);
         return instructions;
     }
 
-    private String traverse(ParseTreeNode node) {
+    private String traverse(SyntaxTreeeNode node) {
         if (node == null) {
             return "";
         }
@@ -51,13 +54,14 @@ class ThreeAddressCodeGenerator {
 
     public static void testTAC() {
         // Construct the parse tree for the expression: x = a + b * c;
-        ParseTreeNode root = new ParseTreeNode("=");
-        ParseTreeNode x = new ParseTreeNode("x");
-        ParseTreeNode plus = new ParseTreeNode("+");
-        ParseTreeNode a = new ParseTreeNode("a");
-        ParseTreeNode multiply = new ParseTreeNode("*");
-        ParseTreeNode b = new ParseTreeNode("b");
-        ParseTreeNode c = new ParseTreeNode("c");
+        System.out.println("x = a + b * c");
+        SyntaxTreeeNode root = new SyntaxTreeeNode("=");
+        SyntaxTreeeNode x = new SyntaxTreeeNode("x");
+        SyntaxTreeeNode plus = new SyntaxTreeeNode("+");
+        SyntaxTreeeNode a = new SyntaxTreeeNode("a");
+        SyntaxTreeeNode multiply = new SyntaxTreeeNode("*");
+        SyntaxTreeeNode b = new SyntaxTreeeNode("b");
+        SyntaxTreeeNode c = new SyntaxTreeeNode("c");
 
         root.addChild(x);
         root.addChild(plus);
@@ -66,7 +70,6 @@ class ThreeAddressCodeGenerator {
         multiply.addChild(b);
         multiply.addChild(c);
 
-        System.out.println(root);
         // Generate TAC
         ThreeAddressCodeGenerator tacGenerator = new ThreeAddressCodeGenerator();
         List<String> code = tacGenerator.generateTAC(root);
